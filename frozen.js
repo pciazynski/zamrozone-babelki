@@ -7,10 +7,26 @@ let started = false;
 const circle = new Circle(50, 55, radius);
 const circle2 = new Circle(50, 595, radius);
 
+const circles = new Circles();
+circles.add(circle)
+circles.add(circle2)
+
+function Circles() {
+  this.circles = [];
+
+  this.add = function (circle) {
+    this.circles.push(circle)
+  };
+}
+
 function Circle(x, y, r) {
   this.x = x;
   this.y = y;
   this.r = r;
+}
+
+function addNewCircle() {
+  circles.add(new Circle(50, 595, radius))
 }
 
 function doKeyDown(e) {
@@ -29,10 +45,14 @@ function drawBall(ctx, c) {
 function draw(canvas) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBall(ctx, circle);
-  drawBall(ctx, circle2);
+  drawBall(ctx, circles.circles[0]);
+  drawBall(ctx, circles.circles[1]);
+  circles.circles.forEach(c => {
+    drawBall(ctx, c)
+  })
 
   if (started) {
+    addNewCircle()
     if (circle2.y - 2 * radius - circle.y > 0) {
       circle2.y += -dy;
     }
